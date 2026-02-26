@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Governance | CribConnects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    :root {
+      --blue:    #62cefa;
+      --blue-dk: #62cefa;
+      --black:   #1d1d1f;
+      --gray-6:  #6e6e73;
+      --gray-4:  #424245;
+      --gray-b:  #f5f5f7;
+      --gray-e:  #e8e8ed;
+      --white:   #ffffff;
+      --border:  rgba(0,0,0,0.08);
+      --border-m:rgba(0,0,0,0.14);
+      --shadow-l:0 8px 40px rgba(0,0,0,0.10);
+      --red:    #ff3b30;
+      --orange: #ff6b22;
+      --safe:   #34c759;
+      --font: 'Figtree', -apple-system, sans-serif;
+      --tight: -0.03em;
+      --body:  -0.01em;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 52px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+    }
+    .nav-brand {
+      font-size: .875rem; font-weight: 700; letter-spacing: var(--tight);
+      color: #061a67; text-decoration: none; display: flex; align-items: center; gap: .6rem;
+    }
+    .brand-logo-img { width: 34px; height: 34px; object-fit: contain; display: block; }
+    .brand-word { color: #061a67; font-weight: 800; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .78rem; font-weight: 500; letter-spacing: var(--body);
+      color: var(--gray-6); text-decoration: none; transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-actions { display: flex; align-items: center; gap: .65rem; }
+    .nav-cta {
+      font-size: .78rem; font-weight: 600; letter-spacing: var(--body);
+      padding: .42rem 1.1rem; background: var(--blue); color: #fff;
+      border-radius: 980px; border: none; cursor: pointer; transition: background .15s;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .nav-cta:hover { background: var(--blue-dk); }
+    .lang-switch { display: inline-flex; align-items: center; gap: .25rem; background: rgba(0,0,0,.04); border: 1px solid var(--border); border-radius: 980px; padding: .2rem; }
+    .lang-btn { font-family: var(--font); font-size: .68rem; font-weight: 700; letter-spacing: .06em; border: none; border-radius: 980px; padding: .25rem .6rem; background: transparent; color: var(--gray-6); cursor: pointer; transition: all .15s; }
+    .lang-btn.active { background: var(--blue); color: #fff; }
+    .lang-btn:hover { color: var(--black); }
+
+    /* ── LAYOUT ── */
+    .section { padding: 90px 2.5rem; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-alt { background: var(--gray-b); }
+    .section-dark { background: var(--black); }
+
+    .eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); margin-bottom: .875rem; display: block; }
+    .eyebrow-dim { color: rgba(255,255,255,0.4); }
+    h2 { letter-spacing: var(--tight); font-weight: 800; color: var(--black); }
+    .section-h { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.07; margin-bottom: 1rem; }
+    .section-sub { font-size: 1rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); max-width: 560px; }
+    .text-w { color: var(--white); }
+    .sub-w { color: rgba(255,255,255,0.5); }
+
+    .card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; transition: box-shadow .2s, transform .2s; }
+    .card:hover { box-shadow: var(--shadow-l); transform: translateY(-2px); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center; padding: 52px 40px 24px;
+      background: var(--black); position: relative; overflow: hidden;
+    }
+    .hero-content {
+      position: relative; z-index: 1;
+      left: auto; top: auto;
+      width: min(100%, 980px);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transform: translateY(-4vh);
+    }
+    .hero-logo-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .65rem;
+    }
+    .hero-logo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 6% 6%;
+      border-radius: 28px;
+      background: rgba(8, 12, 20, .92);
+      z-index: -1;
+    }
+    .hero-logo-img {
+      width: clamp(108px, 16vw, 164px);
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 16px rgba(98,206,250,.34));
+    }
+    .hero-glow {
+      position: absolute; width: 800px; height: 500px; border-radius: 50%;
+      top: 5%; left: 50%; transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(98,206,250,.20) 0%, transparent 70%);
+      z-index: 0; pointer-events: none;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 30%, black 20%, transparent 80%);
+    }
+    #hero > :not(.hero-glow):not(.hero-grid) { position: relative; z-index: 1; }
+
+    .hero-badge { display: none !important; }
+    .hero-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 6px var(--blue); animation: blink 2.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    .hero-h1 { font-size: clamp(2.8rem, 7.8vw, 6.2rem); font-weight: 900; line-height: 1.01; letter-spacing: var(--tight); color: var(--white); margin: 0 0 1.25rem; }
+    .hero-h1 span { color: var(--blue); }
+    .hero-sub { font-size: 1.1rem; color: rgba(255,255,255,.48); max-width: 520px; margin: 0 auto 1.75rem; line-height: 1.65; font-weight: 400; letter-spacing: var(--body); }
+
+    .btn-row { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .btn-primary { padding: .78rem 1.75rem; background: var(--blue); color: #fff; border-radius: 980px; font-size: .875rem; font-weight: 600; letter-spacing: var(--body); border: none; cursor: pointer; transition: background .15s; text-decoration: none; display: inline-flex; align-items: center; gap: .45rem; }
+    .btn-primary:hover { background: var(--blue-dk); }
+    .btn-ghost { padding: .78rem 1.75rem; background: transparent; color: rgba(255,255,255,.7); border-radius: 980px; font-size: .875rem; font-weight: 600; letter-spacing: var(--body); border: 1px solid rgba(255,255,255,.15); cursor: pointer; transition: all .15s; text-decoration: none; display: inline-flex; align-items: center; gap: .45rem; }
+    .btn-ghost:hover { background: rgba(255,255,255,.07); color: #fff; }
+    .btn-ghost-dk { padding: .78rem 1.75rem; background: transparent; color: var(--gray-6); border-radius: 980px; font-size: .875rem; font-weight: 600; letter-spacing: var(--body); border: 1px solid var(--border-m); cursor: pointer; transition: all .15s; text-decoration: none; display: inline-flex; align-items: center; gap: .45rem; }
+    .btn-ghost-dk:hover { border-color: var(--blue); color: var(--blue); }
+
+
+    /* ── WHAT ── */
+    #what .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3rem; }
+    .pillar { padding: 2rem; }
+    .pillar-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: .9rem; margin-bottom: 1.1rem; }
+    .pillar h3 { font-size: .95rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .4rem; }
+    .pillar p { font-size: .82rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); }
+    .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 1.25rem; }
+    .stat-box { padding: 1.75rem 2rem; text-align: center; border-radius: 18px; }
+    .stat-box .n { font-size: 2.2rem; font-weight: 800; letter-spacing: var(--tight); }
+    .stat-box .l { font-size: .75rem; color: var(--gray-6); margin-top: .3rem; letter-spacing: var(--body); }
+
+    /* ── TIMELINE ── */
+    .tl-outer { overflow-x: auto; margin-top: 3rem; padding-bottom: 1rem; }
+    .tl-track { display: flex; width: max-content; padding: 0 2rem; position: relative; margin: 0 auto; }
+    .tl-track::after { content:''; position:absolute; top:28px; left:2rem; right:2rem; height:1px; background:var(--border-m); }
+    .tl-item { width: 220px; padding: 0 1.1rem; cursor: pointer; flex-shrink: 0; }
+    .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-m); background: var(--white); margin: 22px auto 1.25rem; position: relative; z-index: 1; transition: all .2s; }
+    .tl-item:hover .tl-dot, .tl-item.active .tl-dot { border-color: var(--blue); background: var(--blue); box-shadow: 0 0 0 4px rgba(98,206,250,.20); }
+    .tl-date { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: .4rem; text-align: center; }
+    .tl-title { font-size: .9rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .4rem; text-align: center; }
+    .tl-body { font-size: .75rem; color: var(--gray-6); line-height: 1.6; text-align: center; letter-spacing: var(--body); }
+    .tl-chip { display: inline-block; margin-top: .625rem; padding: .16rem .625rem; border-radius: 980px; font-size: .6rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ── RISK TIERS ── */
+    .tier-layout { display: grid; grid-template-columns: 5fr 4fr; gap: 2.5rem; align-items: start; margin-top: 3rem; }
+    .tier-list { display: flex; flex-direction: column; }
+    .tier-item { display: grid; grid-template-columns: 3px 1fr auto; align-items: center; gap: 1.25rem; padding: 1.25rem 1rem 1.25rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: all .15s; border-radius: 0; }
+    .tier-item:first-child { border-top: 1px solid var(--border); }
+    .tier-item.active, .tier-item:hover { background: var(--gray-b); border-radius: 12px; padding-left: .875rem; margin: 0 -.875rem; border-bottom-color: transparent; border-top-color: transparent; }
+    .tier-accent { width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+    .tier-label { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .2rem; }
+    .tier-name { font-size: .95rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .25rem; }
+    .tier-short { font-size: .78rem; color: var(--gray-6); line-height: 1.5; letter-spacing: var(--body); }
+    .tier-chevron { color: var(--gray-e); font-size: .8rem; flex-shrink: 0; transition: color .15s; }
+    .tier-item.active .tier-chevron, .tier-item:hover .tier-chevron { color: var(--blue); }
+
+    .tier-right { display: flex; flex-direction: column; gap: 1.25rem; position: sticky; top: 68px; }
+    .tier-panel { padding: 1.75rem; min-height: 280px; }
+    .tp-label { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .625rem; }
+    .tp-title { font-size: 1.35rem; font-weight: 800; letter-spacing: var(--tight); margin-bottom: .75rem; }
+    .tp-desc { font-size: .82rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); margin-bottom: 1rem; }
+    .tp-list { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+    .tp-list li { display: flex; gap: .5rem; font-size: .78rem; color: var(--gray-4); letter-spacing: var(--body); line-height: 1.5; }
+    .tp-list li::before { content: '→'; flex-shrink: 0; font-weight: 700; color: var(--blue); }
+    .tp-deadline { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: .7rem; color: var(--gray-6); letter-spacing: var(--body); }
+
+    .gpai-box { padding: 1.75rem 2rem; border-radius: 16px; background: rgba(0,113,227,.04); border: 1px solid rgba(0,113,227,.15); margin-top: 2rem; }
+    .gpai-box-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+    .gpai-ico { width: 36px; height: 36px; border-radius: 10px; background: rgba(98,206,250,.13); border: 1px solid rgba(0,113,227,.2); display: flex; align-items: center; justify-content: center; color: var(--blue); font-size: .9rem; flex-shrink: 0; }
+    .gpai-box h4 { font-size: 1rem; font-weight: 700; letter-spacing: var(--tight); }
+    .gpai-box .gpai-intro { font-size: .82rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); margin-bottom: 1.25rem; max-width: 780px; }
+    .gpai-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: .25rem; }
+    .gpai-col { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; }
+    .gpai-col-label { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: .4rem; }
+    .gpai-col h5 { font-size: .82rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .35rem; }
+    .gpai-col p { font-size: .75rem; color: var(--gray-6); line-height: 1.6; letter-spacing: var(--body); }
+    .gpai-deadline { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(0,113,227,.12); font-size: .72rem; color: var(--gray-6); letter-spacing: var(--body); display: flex; align-items: center; gap: .5rem; }
+    @media (max-width: 900px) { .gpai-cols { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .gpai-cols { grid-template-columns: 1fr; } }
+
+    /* ── FLOWCHART ── */
+    .flow-area { max-width: 640px; margin: 3rem auto 0; }
+    .flow-node { padding: 1.6rem 1.75rem; border-radius: 14px; border: 1px solid var(--border); background: var(--white); margin-bottom: .625rem; }
+    .flow-node.decision { border-color: rgba(0,113,227,.18); }
+    .flow-node.t-safe    { border-color: rgba(52,199,89,.3);  background: rgba(52,199,89,.04); }
+    .flow-node.t-limited { border-color: rgba(0,113,227,.3);  background: rgba(0,113,227,.04); }
+    .flow-node.t-warn    { border-color: rgba(255,107,34,.3); background: rgba(255,107,34,.04); }
+    .flow-node.t-danger  { border-color: rgba(255,59,48,.3);  background: rgba(255,59,48,.04); }
+    .flow-q { font-size: 1rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: 1.1rem; }
+    .flow-opts { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .flow-opt { padding: .5rem 1.1rem; border-radius: 980px; font-size: .78rem; font-weight: 600; letter-spacing: var(--body); border: 1px solid var(--border-m); background: var(--white); color: var(--black); cursor: pointer; transition: all .15s; }
+    .flow-opt.yes { border-color: rgba(255,59,48,.3); color: #cc2200; }
+    .flow-opt.yes:hover { background: rgba(255,59,48,.06); }
+    .flow-opt.no  { border-color: rgba(52,199,89,.35); color: #1a8c35; }
+    .flow-opt.no:hover  { background: rgba(52,199,89,.07); }
+    .flow-opt:not(.yes):not(.no):hover { border-color: var(--blue); color: var(--blue); }
+    .flow-result-title { font-size: 1.25rem; font-weight: 800; letter-spacing: var(--tight); margin-bottom: .45rem; }
+    .flow-result-desc { font-size: .85rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); margin-bottom: 1rem; }
+    .flow-actions-list { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+    .flow-act { display: flex; gap: .5rem; font-size: .78rem; color: var(--gray-4); letter-spacing: var(--body); }
+    .flow-act::before { content:'→'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+    .flow-restart { font-size: .75rem; color: var(--blue); cursor: pointer; font-weight: 600; background: none; border: none; padding: 0; }
+    .flow-restart:hover { text-decoration: underline; }
+
+    /* ── ROADMAP ── */
+    .roadmap-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-top: 3rem; }
+    .step { padding: 1.75rem; }
+    .step-n { font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
+    .step h4 { font-size: .9rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .35rem; }
+    .step p { font-size: .78rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); }
+    .step-meta { font-size: .68rem; color: var(--gray-6); margin-top: .625rem; font-weight: 500; }
+
+    /* ── USE CASES ── */
+    .uc-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1.25rem; margin-top: 3rem; row-gap: 1.25rem; }
+    .uc { padding: 1.6rem; }
+    .uc-tier { font-size: .6rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: .18rem .6rem; border-radius: 980px; display: inline-block; margin-bottom: .875rem; }
+    .uc-tier.high { background: rgba(255,107,34,.1); color: #c45000; border: 1px solid rgba(255,107,34,.25); }
+    .uc-tier.limited { background: rgba(98,206,250,.12); color: var(--blue); border: 1px solid rgba(0,113,227,.2); }
+    .uc-tier.minimal { background: rgba(52,199,89,.1); color: #1a8c35; border: 1px solid rgba(52,199,89,.25); }
+    .uc-tier.prohibited { background: rgba(255,59,48,.08); color: #cc2200; border: 1px solid rgba(255,59,48,.2); }
+    .uc h4 { font-size: .875rem; font-weight: 700; letter-spacing: var(--tight); margin-bottom: .3rem; }
+    .uc-sector { font-size: .7rem; color: var(--gray-6); margin-bottom: .5rem; letter-spacing: var(--body); }
+    .uc p { font-size: .75rem; color: var(--gray-4); line-height: 1.6; letter-spacing: var(--body); }
+    .uc-note { font-size: .7rem; color: var(--gray-6); margin-top: .5rem; font-style: italic; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--black); padding: 5rem 2.5rem 3rem; text-align: center; }
+    .footer-logo { font-size: 1.2rem; font-weight: 800; letter-spacing: var(--tight); color: var(--white); margin-bottom: .3rem; }
+    .footer-tag { font-size: .8rem; color: rgba(255,255,255,.35); margin-bottom: 2.25rem; letter-spacing: var(--body); }
+    .footer-btns { display: flex; justify-content: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .footer-disc { font-size: .7rem; color: rgba(255,255,255,.2); max-width: 520px; margin: 0 auto; line-height: 1.65; letter-spacing: var(--body); }
+    .sources-wrap { max-width: 760px; margin: 1.5rem auto 0; text-align: left; padding: 1rem 1.15rem; border: 1px solid rgba(255,255,255,.09); border-radius: 12px; background: rgba(255,255,255,.02); }
+    .sources-title { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.75); margin-bottom: .55rem; }
+    .sources-list { margin: 0; padding-left: 1.05rem; }
+    .sources-list li { font-size: .67rem; color: rgba(255,255,255,.45); line-height: 1.55; letter-spacing: var(--body); margin-bottom: .35rem; }
+    .sources-list li:last-child { margin-bottom: 0; }
+    .footer-copy { font-size: .65rem; color: rgba(255,255,255,.15); margin-top: 2rem; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ── DIAGNOSTIC MODAL / FULLSCREEN OVERLAY ── */
+    .diag-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: none; align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .diag-overlay.open { display: flex; }
+    .diag-modal {
+      background: var(--white); border-radius: 24px;
+      width: 100%; max-width: 720px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 40px 100px rgba(0,0,0,.3);
+      animation: diag-in .3s cubic-bezier(.16,1,.3,1);
+      position: relative;
+    }
+    @keyframes diag-in { from{opacity:0;transform:scale(.96) translateY(12px)} to{opacity:1;transform:none} }
+
+    .diag-header {
+      padding: 1.75rem 2rem 0;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.25rem;
+    }
+    .diag-header-text {}
+    .diag-header h2 { font-size: 1.1rem; font-weight: 800; letter-spacing: var(--tight); margin-bottom: .2rem; }
+    .diag-header p { font-size: .78rem; color: var(--gray-6); letter-spacing: var(--body); }
+    .diag-close { width: 28px; height: 28px; border-radius: 50%; background: var(--gray-b); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .75rem; color: var(--gray-6); flex-shrink: 0; transition: background .15s; }
+    .diag-close:hover { background: var(--gray-e); }
+
+    /* Decision Tree Visual */
+    .diag-body { padding: 2rem; }
+    .dtree { display: flex; flex-direction: column; gap: 0; }
+
+    /* Progress breadcrumb */
+    .diag-crumb { display: flex; gap: .375rem; align-items: center; margin-bottom: 1.75rem; flex-wrap: wrap; }
+    .crumb-step { font-size: .65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: .2rem .625rem; border-radius: 980px; background: var(--blue); color: #fff; }
+    .crumb-sep { font-size: .6rem; color: var(--gray-6); }
+    .crumb-future { font-size: .65rem; color: var(--gray-6); letter-spacing: .05em; }
+
+    /* Current node */
+    .dtree-node { background: var(--gray-b); border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
+    .dtree-node-label { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: .5rem; }
+    .dtree-q { font-size: 1.05rem; font-weight: 700; letter-spacing: var(--tight); line-height: 1.3; margin-bottom: 1.25rem; }
+
+    /* Answer options as cards */
+    .dtree-opts { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; }
+    .dtree-opt {
+      padding: 1rem 1.1rem; border-radius: 12px; border: 1.5px solid var(--border-m);
+      background: var(--white); cursor: pointer; transition: all .18s;
+      text-align: left;
+    }
+    .dtree-opt-label { font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-6); margin-bottom: .3rem; }
+    .dtree-opt-text { font-size: .85rem; font-weight: 600; letter-spacing: var(--tight); }
+    .dtree-opt:hover { border-color: var(--blue); background: rgba(0,113,227,.04); }
+    .dtree-opt:hover .dtree-opt-label { color: var(--blue); }
+
+    /* History trail */
+    .dtree-history { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 1rem; }
+    .dtree-hist-item { display: flex; align-items: center; gap: .875rem; padding: .75rem 1rem; background: var(--white); border: 1px solid var(--border); border-radius: 10px; }
+    .dhi-q { font-size: .75rem; color: var(--gray-6); flex: 1; letter-spacing: var(--body); }
+    .dhi-a { font-size: .75rem; font-weight: 600; color: var(--black); letter-spacing: var(--body); }
+    .dhi-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+    .dhi-arrow { color: var(--gray-e); font-size: .7rem; flex-shrink: 0; }
+
+    /* Result */
+    .dtree-result { text-align: center; padding: 1rem 0; }
+    .dr-icon { width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 1.1rem; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .dtree-result h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: var(--tight); margin-bottom: .625rem; }
+    .dtree-result .dr-desc { font-size: .875rem; color: var(--gray-6); line-height: 1.65; letter-spacing: var(--body); max-width: 440px; margin: 0 auto 1.25rem; }
+    .dr-actions { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1.5rem; text-align: left; }
+    .dr-act { display: flex; gap: .5rem; font-size: .8rem; color: var(--gray-4); letter-spacing: var(--body); line-height: 1.5; padding: .7rem .875rem; background: var(--gray-b); border-radius: 10px; }
+    .dr-act::before { content:'→'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+    .dr-btns { display: flex; flex-direction: column; gap: .625rem; }
+    .dr-restart { font-size: .8rem; font-weight: 600; color: var(--blue); cursor: pointer; background: none; border: none; letter-spacing: var(--body); }
+    .dr-restart:hover { text-decoration: underline; }
+
+    /* ── CONTACT MODAL ── */
+    .modal-overlay { position: fixed; inset: 0; z-index: 600; background: rgba(0,0,0,.45); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: var(--white); border-radius: 22px; padding: 2.25rem; max-width: 400px; width: 100%; box-shadow: 0 40px 80px rgba(0,0,0,.25); animation: modal-in .25s ease; }
+    @keyframes modal-in { from{opacity:0;transform:scale(.96) translateY(8px)} to{opacity:1;transform:none} }
+    .modal h3 { font-size: 1.15rem; font-weight: 800; letter-spacing: var(--tight); margin-bottom: .3rem; }
+    .modal p { font-size: .82rem; color: var(--gray-6); margin-bottom: 1.25rem; letter-spacing: var(--body); }
+    .modal-input { width: 100%; padding: .7rem 1rem; border: 1px solid var(--border-m); border-radius: 10px; font-family: var(--font); font-size: .875rem; background: var(--gray-b); color: var(--black); outline: none; margin-bottom: .625rem; transition: border-color .15s; letter-spacing: var(--body); }
+    .modal-input:focus { border-color: var(--blue); }
+    .modal-submit { width: 100%; padding: .8rem; background: var(--blue); color: #fff; border-radius: 10px; border: none; font-family: var(--font); font-size: .875rem; font-weight: 700; cursor: pointer; transition: background .15s; }
+    .modal-submit:hover { background: var(--blue-dk); }
+    .modal-cancel { width: 100%; margin-top: .5rem; padding: .7rem; background: transparent; color: var(--gray-6); border: 1px solid var(--border); border-radius: 10px; font-family: var(--font); font-size: .875rem; cursor: pointer; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .tier-layout { grid-template-columns: 1fr; }
+      .tier-right { position: static; }
+      #what .pillars, .stat-row, .roadmap-grid { grid-template-columns: repeat(2,1fr); }
+      .uc-grid { grid-template-columns: repeat(2,1fr); }
+      .nav-brand { display: inline-flex; font-size: .78rem; }
+      .nav-brand .brand-logo-img { display: none; }
+      .nav-links { display: none; }
+      nav { justify-content: space-between; padding: 0 .75rem; }
+      .nav-actions { margin-left: auto; gap: .45rem; }
+      .nav-cta {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: .38rem .75rem; font-size: .72rem;
+        white-space: nowrap;
+      }
+      .lang-switch { display: inline-flex; }
+      .dtree-opts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .roadmap-grid, .uc-grid, #what .pillars, .stat-row { grid-template-columns: 1fr; }
+      .section { padding: 60px 1.5rem; }
+      #hero {
+        min-height: calc(100vh - 52px);
+        min-height: calc(100dvh - 52px);
+        min-height: calc(100svh - 52px);
+        margin-top: 52px;
+        padding: 12px 24px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-content {
+        position: relative;
+        left: auto; top: auto;
+        width: min(100%, 640px);
+        max-width: 640px;
+        transform: translateY(-6vh);
+        margin: 0 auto;
+        text-align: center;
+      }
+      .hero-glow {
+        width: 130vw;
+        max-width: 820px;
+        height: 92vw;
+        max-height: 620px;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .hero-grid {
+        mask-image: radial-gradient(ellipse 78% 72% at 50% 32%, black 20%, transparent 82%);
+      }
+      .hero-h1 { font-size: clamp(2.15rem, 12vw, 3.3rem); }
+      .hero-sub { font-size: 1rem; margin: 0 auto 1.25rem; }
+      .hero-logo-wrap { margin-bottom: .6rem; }
+      .hero-logo-img { width: clamp(72px, 21vw, 102px); }
+      .nav-cta { padding: .34rem .65rem; font-size: .68rem; }
+      .lang-btn { font-size: .62rem; padding: .2rem .48rem; }
+    }
+    @media print { nav, .diag-overlay, .modal-overlay { display: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#hero" class="nav-brand">
+    <img src="cribconnects-logo.png" alt="CribConnects logo" class="brand-logo-img" />
+    <span class="brand-word">CribConnects</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#what" id="navWhat">Wat Is Het</a></li>
+    <li><a href="#eu-act" id="navEu">EU AI Act</a></li>
+    <li><a href="#risks" id="navRisks">Risicotiers</a></li>
+    <li><a href="#roadmap" id="navRoadmap">Stappenplan</a></li>
+    <li><a href="#usecases" id="navUsecases">Praktijk</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="nav-cta" onclick="openDiag()" id="navDiagBtn">
+      <i class="fas fa-stethoscope" style="font-size:.7rem"></i>
+      Doe de Diagnose
+    </button>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button class="lang-btn active" id="langNl" type="button">NL</button>
+      <button class="lang-btn" id="langEn" type="button">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-logo-wrap">
+      <img src="cribconnects-logo.png" alt="CribConnects logo" class="hero-logo-img" />
+    </div>
+    <h1 class="hero-h1" id="heroTitle">AI Governance.<br/><span>Ken de Regels.</span></h1>
+    <p class="hero-sub" id="heroSub">Alles wat uw organisatie nodig heeft om de EU AI Act te begrijpen, implementeren en aantonen - helder en zonder juridisch jargon.</p>
+    <div class="btn-row">
+      <a href="#eu-act" class="btn-primary" id="heroBtnPrimary">Ontdek de EU AI Act <i class="fas fa-arrow-down" style="font-size:.7rem"></i></a>
+      <a class="btn-ghost" onclick="openDiag()" style="cursor:pointer" id="heroBtnDiag">Doe de Diagnose <i class="fas fa-chevron-right" style="font-size:.7rem"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WAT IS AI GOVERNANCE ── -->
+<section id="what" class="section">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="whatEyebrow">Basis</span>
+    <h2 class="section-h" id="whatTitle">Wat is AI Governance?</h2>
+    <p class="section-sub" id="whatSub">Een kader van beleid, processen en controles dat ervoor zorgt dat AI-systemen veilig, eerlijk en binnen wettelijke grenzen opereren. Geen technische bijzaak, een strategische noodzaak.</p>
+    <div class="pillars">
+      <div class="card pillar">
+        <div class="pillar-icon" style="background:rgba(98,206,250,.12);color:var(--blue)"><i class="fas fa-eye"></i></div>
+        <h3 id="pillar1Title">Transparantie</h3>
+        <p id="pillar1Body">Mensen moeten weten wanneer AI hun beslissingen beïnvloedt en hoe die beslissingen tot stand komen. Geen zwarte dozen in hoog-risico contexten.</p>
+      </div>
+      <div class="card pillar">
+        <div class="pillar-icon" style="background:rgba(52,199,89,.1);color:#1a8c35"><i class="fas fa-scale-balanced"></i></div>
+        <h3 id="pillar2Title">Verantwoording</h3>
+        <p id="pillar2Body">Een duidelijke verantwoordelijkheidsketen van modelontwikkelaars tot gebruikers. Iemand moet eigenaar zijn van de uitkomsten en risico's van elk AI-systeem.</p>
+      </div>
+      <div class="card pillar">
+        <div class="pillar-icon" style="background:rgba(255,107,34,.1);color:#c45000"><i class="fas fa-shield-halved"></i></div>
+        <h3 id="pillar3Title">Risicobeheer</h3>
+        <p id="pillar3Body">Identificeer, beoordeel en beperk risico's vóór inzet. Continue monitoring naarmate modellen veranderen en bedrijfscontexten evolueren.</p>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="card stat-box"><div class="n" style="color:var(--blue)">180+</div><div class="l" id="stat1">Landen met AI-strategie of -regulering (OESO, 2024) [1]</div></div>
+      <div class="card stat-box"><div class="n" style="color:var(--orange)">56%</div><div class="l" id="stat2">van bedrijven die AI gebruiken heeft geen formeel governancekader [2]</div></div>
+      <div class="card stat-box"><div class="n" style="color:var(--red)">€35M</div><div class="l" id="stat3">maximale boete of 7% wereldwijde omzet bij zwaarste overtredingen [3]</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EU AI ACT TIJDLIJN ── -->
+<section id="eu-act" class="section section-alt">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="euEyebrow">Verordening (EU) 2024/1689</span>
+    <h2 class="section-h" id="euTitle">De EU AI Act - Belangrijke Data</h2>
+    <p class="section-sub" id="euSub">De eerste uitgebreide AI-wet ter wereld. Van toepassing op elke organisatie die AI ontwikkelt, inzet of gebruikt dat mensen in de EU beïnvloedt.</p>
+  </div>
+  <div class="tl-outer reveal">
+    <div class="tl-track" id="tlTrack"></div>
+  </div>
+</section>
+
+<!-- ── BESLISSINGSTOOL ── -->
+<section id="flowchart" class="section">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="flowEyebrow">Beslissingsraamwerk</span>
+    <h2 class="section-h" id="flowTitle">Geldt de EU AI Act voor u?</h2>
+    <p class="section-sub" id="flowSub">Doorloop de beslissingsboom om uw verplichtingen te bepalen. Elk pad leidt naar een specifiek complianceprofiel.</p>
+    <div class="flow-area" id="flowArea"></div>
+  </div>
+</section>
+
+<!-- ── RISICOTIERS ── -->
+<section id="risks" class="section section-alt">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="riskEyebrow">Classificatieraamwerk</span>
+    <h2 class="section-h" id="riskTitle">De Vier Risicotiers</h2>
+    <p class="section-sub" id="riskSub">Elk AI-systeem valt in één van vier categorieën. Uw verplichtingen en sancties schalen dienovereenkomstig. Klik op een tier om te verkennen.</p>
+    <div class="tier-layout">
+      <!-- Left: tier list -->
+      <div class="tier-list" id="tierList"></div>
+      <!-- Right: panel -->
+      <div class="tier-right">
+        <div class="card tier-panel" id="tierPanel"></div>
+      </div>
+    </div>
+    <!-- GPAI full-width box -->
+    <div class="gpai-box">
+      <div class="gpai-box-head">
+        <div class="gpai-ico"><i class="fas fa-microchip"></i></div>
+        <h4 id="gpaiTitle">General-Purpose AI (GPAI) - Een aparte, horizontale categorie</h4>
+      </div>
+      <p class="gpai-intro" id="gpaiIntro">Foundation models en grote taalmodellen (LLM's) zoals GPT-4, Claude of Gemini vallen niet in één van de vier risicotiers. Zij vormen een aparte, dwarsdoorsnijdende categorie. Ongeacht de uiteindelijke toepassing gelden er verplichtingen voor de aanbieder van het model zelf. Deze zijn van kracht vanaf <strong>augustus 2025</strong>.</p>
+      <div class="gpai-cols">
+        <div class="gpai-col">
+          <div class="gpai-col-label" id="gpaiCol1Label">Alle GPAI-aanbieders</div>
+          <h5 id="gpaiCol1Title">Technische Documentatie</h5>
+          <p id="gpaiCol1Body">Aanbieders moeten uitgebreide technische documentatie bijhouden over trainingsdata, architectuur, capaciteiten en bekende beperkingen, beschikbaar voor toezichthouders op verzoek [3].</p>
+        </div>
+        <div class="gpai-col">
+          <div class="gpai-col-label" id="gpaiCol2Label">Alle GPAI-aanbieders</div>
+          <h5 id="gpaiCol2Title">Auteursrechtsnaleving</h5>
+          <p id="gpaiCol2Body">Beleid om auteursrechten te respecteren is verplicht. Aanbieders moeten een samenvatting publiceren van gebruikte trainingsdata, zodat rechthebbenden bezwaar kunnen maken [3].</p>
+        </div>
+        <div class="gpai-col">
+          <div class="gpai-col-label" id="gpaiCol3Label">Systeemrisicomodellen (&gt;10²⁵ FLOP)</div>
+          <h5 id="gpaiCol3Title">Systeemrisicobeoordeling</h5>
+          <p id="gpaiCol3Body">Modellen getraind met meer dan 10²⁵ FLOP worden aangemerkt als modellen met systeemrisico en vereisen aanvullend testen, incidentrapportage en cybermaatregelen [3][5].</p>
+        </div>
+      </div>
+      <div class="gpai-deadline"><i class="fas fa-circle-info" style="color:var(--blue);font-size:.75rem"></i> <span id="gpaiDeadlineText">Van kracht sinds augustus 2025. Betrokken aanbieders: OpenAI, Anthropic, Google DeepMind, Mistral, Meta en andere modelleveranciers actief op de EU-markt [3][5].</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STAPPENPLAN ── -->
+<section id="roadmap" class="section">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="roadmapEyebrow">Implementatie</span>
+    <h2 class="section-h" id="roadmapTitle">Het 6-Stappen Complianceplan</h2>
+    <p class="section-sub" id="roadmapSub">Van nul naar auditklaar, een bewezen aanpak zonder te verdrinken in documentatie.</p>
+    <div class="roadmap-grid" id="roadmapGrid"></div>
+  </div>
+</section>
+
+<!-- ── PRAKTIJKGEVALLEN ── -->
+<section id="usecases" class="section section-alt">
+  <div class="section-inner reveal">
+    <span class="eyebrow" id="useEyebrow">Praktijk</span>
+    <h2 class="section-h" id="useTitle">AI in de Praktijk - Risicoclassificatie</h2>
+    <p class="section-sub" id="useSub">Dezelfde AI-functionaliteit kan in verschillende tiers vallen, afhankelijk van context en impact. Zo mappen veelvoorkomende toepassingen op de wet.</p>
+    <div class="uc-grid" id="ucGrid"></div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo" id="footerLogo">AI Governance Hub</div>
+  <div class="footer-tag" id="footerTag">Samengesteld door CribConnects · AI Governance Experts · Amsterdam</div>
+  <div class="footer-btns">
+    <a href="https://www.cribconnects.com" target="_blank" rel="noopener" class="btn-primary" id="footerPrimaryBtn">Plan een Compliancesessie</a>
+    <button class="btn-ghost" onclick="openDiag()" id="footerDiagBtn"><i class="fas fa-stethoscope" style="font-size:.7rem"></i> Doe de Diagnose</button>
+    <button class="btn-ghost" onclick="window.print()" id="footerPdfBtn"><i class="fas fa-download" style="font-size:.7rem"></i> Exporteer PDF</button>
+  </div>
+  <p class="footer-disc" id="footerDisc">Deze pagina is uitsluitend bedoeld voor informatiedoeleinden en vormt geen juridisch advies. Organisaties dienen gekwalificeerde juridische adviseurs te raadplegen om hun specifieke verplichtingen onder Verordening (EU) 2024/1689 te bepalen.</p>
+  <div class="sources-wrap">
+    <div class="sources-title" id="sourcesTitle">Bronnen</div>
+    <ol class="sources-list" id="sourcesList">
+      <li>OESO AI Policy Observatory (2024) en UNESCO beleidsmonitor voor nationale AI-strategieën.</li>
+      <li>Nationale AI-governance surveys 2024 voor enterprise-adoptie en formele governancekaders.</li>
+      <li>Verordening (EU) 2024/1689 (EU AI Act), inclusief artikelen over verboden praktijken, transparantie, hoog-risico en sancties.</li>
+      <li>Europese Commissie implementatietijdlijn voor toepassingsmomenten van de AI Act.</li>
+      <li>GPAI-richtsnoeren en technische drempels voor systeemrisicomodellen (o.a. 10²⁵ FLOP-criterium).</li>
+    </ol>
+  </div>
+  <div class="footer-copy">© 2025 CribConnects · Amsterdam</div>
+</footer>
+
+<!-- ── DIAGNOSE MODAL ── -->
+<div class="diag-overlay" id="diagOverlay" onclick="if(event.target===this)closeDiag()">
+  <div class="diag-modal" id="diagModal">
+    <div class="diag-header">
+      <div class="diag-header-text">
+        <h2 id="diagTitle">AI Risico Diagnose</h2>
+        <p id="diagSub">Beantwoord de vragen om uw risicotier en directe vervolgstappen te bepalen.</p>
+      </div>
+      <button class="diag-close" onclick="closeDiag()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="diag-body">
+      <div class="dtree" id="dtreeContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONTACT MODAL ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3 id="contactTitle">Compliancesessie Aanvragen</h3>
+    <p id="contactSub">Breng uw AI-assets in kaart ten opzichte van Verordening (EU) 2024/1689 met onze experts.</p>
+    <input type="text"  class="modal-input" id="contactOrg" placeholder="Organisatie" />
+    <input type="email" class="modal-input" id="contactEmail" placeholder="E-mailadres" />
+    <button class="modal-submit" id="contactSubmit" onclick="window.open('https://www.cribconnects.com','_blank');closeModal()">Verzoek Indienen</button>
+    <button class="modal-cancel" id="contactCancel" onclick="closeModal()">Annuleren</button>
+  </div>
+</div>
+
+<script>
+function openModal()  { document.getElementById('modalOverlay').classList.add('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function openDiag()  { resetDtree(); document.getElementById('diagOverlay').classList.add('open'); }
+function closeDiag() { document.getElementById('diagOverlay').classList.remove('open'); }
+
+const io = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const deepClone = obj => (typeof structuredClone === 'function' ? structuredClone(obj) : JSON.parse(JSON.stringify(obj)));
+const flowColorMap = { 't-safe':'#1a8c35', 't-limited':'var(--blue)', 't-warn':'#c45000', 't-danger':'#cc2200' };
+let currentLang = 'nl';
+let tlData = [];
+let flowNodes = {};
+let tiers = [];
+let steps = [];
+let usecases = [];
+let dtreeQs = [];
+let dtreeResults = {};
+let qMap = {};
+let dtreeHistory = [];
+let dtreeCurrent = 'q1';
+
+const i18n = {
+  nl: {
+    static: {
+      navWhat:'Wat Is Het', navEu:'EU AI Act', navRisks:'Risicotiers', navRoadmap:'Stappenplan', navUsecases:'Praktijk',
+      navDiagBtn:'<i class="fas fa-stethoscope" style="font-size:.7rem"></i> Doe de Diagnose',
+      heroBadge:'Verordening (EU) 2024/1689 · Nu van kracht',
+      heroTitle:'AI Governance.<br/><span>Ken de Regels.</span>',
+      heroSub:'Alles wat uw organisatie nodig heeft om de EU AI Act te begrijpen, implementeren en aantonen - helder en zonder juridisch jargon.',
+      heroBtnPrimary:'Ontdek de EU AI Act <i class="fas fa-arrow-down" style="font-size:.7rem"></i>',
+      heroBtnDiag:'Doe de Diagnose <i class="fas fa-chevron-right" style="font-size:.7rem"></i>',
+      whatEyebrow:'Basis', whatTitle:'Wat is AI Governance?', whatSub:'Een kader van beleid, processen en controles dat ervoor zorgt dat AI-systemen veilig, eerlijk en binnen wettelijke grenzen opereren. Geen technische bijzaak, een strategische noodzaak.',
+      pillar1Title:'Transparantie', pillar1Body:'Mensen moeten weten wanneer AI hun beslissingen beïnvloedt en hoe die beslissingen tot stand komen. Geen zwarte dozen in hoog-risico contexten.',
+      pillar2Title:'Verantwoording', pillar2Body:'Een duidelijke verantwoordelijkheidsketen van modelontwikkelaars tot gebruikers. Iemand moet eigenaar zijn van de uitkomsten en risico\'s van elk AI-systeem.',
+      pillar3Title:'Risicobeheer', pillar3Body:'Identificeer, beoordeel en beperk risico\'s vóór inzet. Continue monitoring naarmate modellen veranderen en bedrijfscontexten evolueren.',
+      stat1:'Landen met AI-strategie of -regulering (OESO, 2024) [1]', stat2:'van bedrijven die AI gebruiken heeft geen formeel governancekader [2]', stat3:'maximale boete of 7% wereldwijde omzet bij zwaarste overtredingen [3]',
+      euEyebrow:'Verordening (EU) 2024/1689', euTitle:'De EU AI Act - Belangrijke Data', euSub:'De eerste uitgebreide AI-wet ter wereld. Van toepassing op elke organisatie die AI ontwikkelt, inzet of gebruikt dat mensen in de EU beïnvloedt [3][4].',
+      flowEyebrow:'Beslissingsraamwerk', flowTitle:'Geldt de EU AI Act voor u?', flowSub:'Doorloop de beslissingsboom om uw verplichtingen te bepalen. Elk pad leidt naar een specifiek complianceprofiel.',
+      riskEyebrow:'Classificatieraamwerk', riskTitle:'De Vier Risicotiers', riskSub:'Elk AI-systeem valt in één van vier categorieën. Uw verplichtingen en sancties schalen dienovereenkomstig. Klik op een tier om te verkennen.',
+      gpaiTitle:'General-Purpose AI (GPAI) - Een aparte, horizontale categorie',
+      gpaiIntro:'Foundation models en grote taalmodellen (LLM\'s) zoals GPT-4, Claude of Gemini vallen niet in één van de vier risicotiers. Zij vormen een aparte, dwarsdoorsnijdende categorie. Ongeacht de uiteindelijke toepassing gelden er verplichtingen voor de aanbieder van het model zelf. Deze zijn van kracht vanaf <strong>augustus 2025</strong> [3][5].',
+      gpaiCol1Label:'Alle GPAI-aanbieders', gpaiCol1Title:'Technische Documentatie', gpaiCol1Body:'Aanbieders moeten uitgebreide technische documentatie bijhouden over trainingsdata, architectuur, capaciteiten en bekende beperkingen, beschikbaar voor toezichthouders op verzoek [3].',
+      gpaiCol2Label:'Alle GPAI-aanbieders', gpaiCol2Title:'Auteursrechtsnaleving', gpaiCol2Body:'Beleid om auteursrechten te respecteren is verplicht. Aanbieders moeten een samenvatting publiceren van gebruikte trainingsdata, zodat rechthebbenden bezwaar kunnen maken [3].',
+      gpaiCol3Label:'Systeemrisicomodellen (>10²⁵ FLOP)', gpaiCol3Title:'Systeemrisicobeoordeling', gpaiCol3Body:'Modellen getraind met meer dan 10²⁵ FLOP worden aangemerkt als modellen met systeemrisico en vereisen aanvullend testen, incidentrapportage en cybermaatregelen [3][5].',
+      gpaiDeadlineText:'Van kracht sinds augustus 2025. Betrokken aanbieders: OpenAI, Anthropic, Google DeepMind, Mistral, Meta en andere modelleveranciers actief op de EU-markt [3][5].',
+      roadmapEyebrow:'Implementatie', roadmapTitle:'Het 6-Stappen Complianceplan', roadmapSub:'Van nul naar auditklaar, een bewezen aanpak zonder te verdrinken in documentatie.',
+      useEyebrow:'Praktijk', useTitle:'AI in de Praktijk - Risicoclassificatie', useSub:'Dezelfde AI-functionaliteit kan in verschillende tiers vallen, afhankelijk van context en impact. Zo mappen veelvoorkomende toepassingen op de wet.',
+      footerLogo:'AI Governance Hub', footerTag:'Samengesteld door CribConnects · AI Governance Experts · Amsterdam',
+      footerPrimaryBtn:'Plan een Compliancesessie',
+      footerDiagBtn:'<i class="fas fa-stethoscope" style="font-size:.7rem"></i> Doe de Diagnose',
+      footerPdfBtn:'<i class="fas fa-download" style="font-size:.7rem"></i> Exporteer PDF',
+      footerDisc:'Deze pagina is uitsluitend bedoeld voor informatiedoeleinden en vormt geen juridisch advies. Organisaties dienen gekwalificeerde juridische adviseurs te raadplegen om hun specifieke verplichtingen onder Verordening (EU) 2024/1689 te bepalen.',
+      sourcesTitle:'Bronnen',
+      sourcesList:'<li>OESO AI Policy Observatory (2024) en UNESCO beleidsmonitor voor nationale AI-strategieën.</li><li>Nationale AI-governance surveys 2024 voor enterprise-adoptie en formele governancekaders.</li><li>Verordening (EU) 2024/1689 (EU AI Act), inclusief artikelen over verboden praktijken, transparantie, hoog-risico en sancties.</li><li>Europese Commissie implementatietijdlijn voor toepassingsmomenten van de AI Act.</li><li>GPAI-richtsnoeren en technische drempels voor systeemrisicomodellen (o.a. 10²⁵ FLOP-criterium).</li>',
+      diagTitle:'AI Risico Diagnose', diagSub:'Beantwoord de vragen om uw risicotier en directe vervolgstappen te bepalen.',
+      contactTitle:'Compliancesessie Aanvragen', contactSub:'Breng uw AI-assets in kaart ten opzichte van Verordening (EU) 2024/1689 met onze experts.',
+      contactSubmit:'Verzoek Indienen', contactCancel:'Annuleren',
+      contactOrg:'Organisatie', contactEmail:'E-mailadres'
+    },
+    ui: {
+      flowRestart:'← Opnieuw beginnen',
+      ucProhibited:'VERBODEN', ucHigh:'HOOG', ucLimited:'BEPERKT', ucMinimal:'MINIMAAL', ucExample:'bv.',
+      dtreeQuestion:'Vraag', dtreeOf:'van', dtreeOptA:'Optie A', dtreeOptB:'Optie B',
+      dtreePlan:'Plan een sessie met CribConnects', dtreeRestart:'← Opnieuw beginnen'
+    },
+    tlData: [
+      { date:'Aug 2024', title:'Wet van kracht', body:'Verordening (EU) 2024/1689 treedt officieel in werking. De 24-maanden klok begint voor de meeste verplichtingen [3][4].', chip:'Van kracht', cc:'#1a8c35', cb:'rgba(52,199,89,.1)' },
+      { date:'Feb 2025', title:'Verboden praktijken', body:'AI-systemen met subliminale manipulatie, sociaalscoring en realtime biometrische surveillance in openbare ruimten moeten stoppen [3][4].', chip:'Verlopen', cc:'#cc2200', cb:'rgba(255,59,48,.1)' },
+      { date:'Aug 2025', title:'GPAI & Governance', body:'Verplichtingen voor general-purpose AI-modellen van kracht. Organisaties moeten AI-governancekaders opzetten [3][5].', chip:'Nu actief', cc:'#c45000', cb:'rgba(255,107,34,.1)' },
+      { date:'Aug 2026', title:'Hoog-risico (Bijlage I)', body:'Hoog-risico AI in kritieke infrastructuur moet in de EU-database worden geregistreerd en conformiteitsbeoordelingen doorstaan [3][4].', chip:'12 maanden', cc:'var(--blue)', cb:'rgba(98,206,250,.12)' },
+      { date:'Aug 2027', title:'Volledige handhaving', body:'Alle Bijlage III hoog-risico systemen moeten compliant zijn. Nationale toezichthouders starten volledige marktcontrole [3][4].', chip:'24 maanden', cc:'#6e3fc7', cb:'rgba(110,63,199,.1)' }
+    ],
+    flowNodes: {
+      q1:{ type:'decision', q:'Ontwikkelt of gebruikt uw organisatie AI-systemen?', opts:[{l:'Ja - wij bouwen of gebruiken AI',c:'',n:'q2'},{l:'Nee, momenteel niet',c:'no',n:'r-out'}] },
+      q2:{ type:'decision', q:'Richt uw AI zich op personen in de Europese Unie of beïnvloedt het hen?', opts:[{l:'Ja',c:'',n:'q3'},{l:'Nee - puur buiten-EU-activiteiten',c:'no',n:'r-limited'}] },
+      q3:{ type:'decision', q:'Neemt uw AI autonome beslissingen die rechten, toegang tot diensten of arbeidsomstandigheden beïnvloeden?', opts:[{l:'Ja, ingrijpende beslissingen',c:'yes',n:'q4'},{l:'Nee - adviserend of generatief',c:'no',n:'q5'}] },
+      q4:{ type:'decision', q:'Is het ingezet in een gereguleerde sector - zorg, financiën, HR, onderwijs of handhaving?', opts:[{l:'Ja',c:'yes',n:'r-high'},{l:'Nee - algemeen gebruik',c:'no',n:'r-limited'}] },
+      q5:{ type:'decision', q:'Communiceert het direct met gebruikers, genereert het synthetische content, of gebruikt het biometrische gegevens?', opts:[{l:'Ja - chatbot, deepfake of biometrie',c:'yes',n:'r-limited'},{l:'Nee - alleen back-end analyses',c:'no',n:'r-minimal'}] },
+      'r-out':{ type:'t-safe', title:'Buiten Reikwijdte', desc:'Uw organisatie valt momenteel buiten de directe reikwijdte van de wet. Houd ontwikkelingen bij en stel een basis AI-inventarisatie op.', actions:['Stel een intern AI-activaregister op','Wijs een AI-aanspreekpunt aan','Controleer AI-gebruik door externe leveranciers'] },
+      'r-minimal':{ type:'t-safe', title:'Minimaal Risico', desc:'Geen verplichte vereisten onder de EU AI Act. Vrijwillige gedragscodes bouwen vertrouwen op en bereiden u voor op toekomstige regelgeving.', actions:['Documenteer uw AI-systemen intern','Volg de EU vrijwillige AI-gedragscode','Train sleutelpersoneel in verantwoorde AI'] },
+      'r-limited':{ type:'t-limited', title:'Beperkt Risico - Transparantieplicht', desc:'U moet gebruikers informeren wanneer zij met AI communiceren en AI-gegenereerde content labelen. Verplicht vanaf augustus 2026.', actions:['Voeg AI-meldingen toe aan alle chatbot-interfaces','Label alle AI-gegenereerde tekst, afbeeldingen en audio','Werk het privacybeleid bij om AI-gebruik te vermelden'] },
+      'r-high':{ type:'t-warn', title:'Hoog Risico - Volledige Naleving Vereist', desc:'Aanzienlijke verplichtingen gelden vóór inzet. Start nu met uw nalevingsprogramma - deadlines naderen.', actions:['Voer een Grondrechtimpactbeoordeling (FRIA) uit','Bouw een risicobeheerdocumentatiesysteem','Registreer het systeem in de EU AI-database en stel menselijk toezicht in'] }
+    },
+    tiers: [
+      { id:'prohibited', accent:'#ff3b30', label:'Onaanvaardbaar Risico', name:'Verboden Systemen', short:'Verboden AI die een duidelijke bedreiging vormt voor grondrechten.', desc:'AI-toepassingen die een onaanvaardbaar risico voor grondrechten vormen zijn volledig verboden. Deze systemen moeten worden stopgezet of volledig opnieuw worden ontworpen.', items:['Subliminale of manipulatieve technieken','Sociaal scoren door overheidsinstanties','Realtime biometrische identificatie op openbare plaatsen','Emotieherkenning op werkplekken en in onderwijs','Voorspellende politiestrategie op basis van profilering'], deadline:'⛔ Verboden sinds 2 februari 2025' },
+      { id:'high', accent:'#ff6b22', label:'Hoog Risico', name:'Hoog-Risico AI-Systemen', short:'Ingezet in sectoren waar beslissingen grote gevolgen hebben voor mensen.', desc:'Gebruikt in sectoren waar beslissingen significant impact hebben op gezondheid, levensonderhoud of veiligheid. Volledige naleving vereist vóór inzet [3].', items:['Risicobeheersysteemdocumentatie gedurende de gehele levenscyclus','Hoogkwalitatieve trainingsdata met bias-testen','Automatische gebeurtenisregistratie en audittrails','Menselijk toezichtmechanisme, geen volledig autonome beslissingen','Conformiteitsbeoordeling + EU-databaseregistratie','Post-marktmonitoring en incidentrapportage'], deadline:'📋 Bijlage I: aug 2026 · Bijlage III: aug 2027 [3][4]' },
+      { id:'limited', accent:'#62cefa', label:'Beperkt Risico', name:'Beperkt-Risico AI', short:'Systemen die communiceren met mensen of synthetische content genereren.', desc:'Systemen die met mensen communiceren of synthetische content genereren moeten transparant zijn over hun AI-aard [3].', items:['Chatbots moeten gebruikers informeren dat zij met AI praten','Deepfakes moeten worden gelabeld als AI-gegenereerd','Emotieherkenning: melding aan individuen verplicht','AI-gegenereerde content vereist machineleesbare labels'], deadline:'📢 Transparantieverplichtingen: augustus 2026 [3][4]' },
+      { id:'minimal', accent:'#34c759', label:'Minimaal Risico', name:'Minimaal-Risico AI', short:'De grote meerderheid van AI-systemen - geen verplichte regels.', desc:'De grote meerderheid van AI-systemen - spamfilters, aanbevelingssystemen, productiviteitstools. Geen verplichte vereisten, maar goede praktijken bouwen vertrouwen op.', items:['Geen wettelijke verplichtingen - vrijwillige gedragscodes worden aangemoedigd','Volg de EU AI Alliance vrijwillige verbintenis','Documenteer basisinformatie over systeemDoel en data','Hanteer ethische AI-principes voor langdurig vertrouwen'], deadline:'✅ Vrijwillige codes - geen verplichte deadline' }
+    ],
+    steps: [
+      { n:'01', c:'#62cefa', bg:'rgba(98,206,250,.14)', title:'AI-Inventarisatie', desc:'Breng elk AI-systeem in kaart, inclusief schaduw-IT, leverancierstools en ingebedde modellen. U kunt niet besturen wat u niet kent.', meta:'1–2 weken · Alle teams' },
+      { n:'02', c:'#34c759', bg:'rgba(52,199,89,.1)', title:'Risicotriage', desc:'Classificeer elk systeem volgens de criteria van de wet. Identificeer welke in hoog-risico Bijlage-categorieën vallen en welke GPAI zijn.', meta:'1 week · Juridisch + IT' },
+      { n:'03', c:'#ff6b22', bg:'rgba(255,107,34,.1)', title:'Impactbeoordeling', desc:'Voer Grondrechtimpactbeoordelingen (FRIA\'s) uit voor hoog-risico systemen vóór inzet of voortgezet gebruik.', meta:'2–4 weken · Multidisciplinair' },
+      { n:'04', c:'#8e44ad', bg:'rgba(142,68,173,.1)', title:'Technische Maatregelen', desc:'Implementeer logging, bias-testen, datakwaliteitscontroles en fairness-metrics. Documenteer alles voor auditgereedheid.', meta:'Doorlopend · Engineering' },
+      { n:'05', c:'#ff3b30', bg:'rgba(255,59,48,.08)', title:'Menselijk Toezicht', desc:'Bepaal wie AI-beslissingen beoordeelt, wanneer mensen moeten ingrijpen, en hoe overschrijvingen worden geregistreerd. Geen volledig autonome hoog-risico beslissingen.', meta:'2 weken · Operaties' },
+      { n:'06', c:'#00b4d8', bg:'rgba(0,180,216,.1)', title:'Post-marktbewaking', desc:'Monitor modeldrift, verzamel incidentrapporten, actualiseer documentatie. Compliance is een programma, geen project.', meta:'Continu · Alle teams' }
+    ],
+    usecases: [
+      { tier:'high', name:'CV-Screeningssysteem', sector:'HR / Werving', obl:'Conformiteitsbeoordeling + menselijke beoordeling van elke afwijzing vereist.', ex:'ATS-scoring, geautomatiseerde kandidaatranking' },
+      { tier:'high', name:'Kredietscoremodel', sector:'Financiële Diensten', obl:'Verklaarbaardheid, bias-audits en EU-databaseregistratie verplicht.', ex:'Geautomatiseerde leninggoedkeuring, verzekeringsprijzen' },
+      { tier:'limited', name:'Klantenservice Chatbot', sector:'Horeca / Retail', obl:'Moet gebruikers informeren dat zij met AI spreken bij sessiestart.', ex:'Hotelbookingbots, luchtvaartondersteuning' },
+      { tier:'limited', name:'AI-gegenereerde Marketing', sector:'Marketing / Media', obl:'Label alle AI-gegenereerde afbeeldingen, tekst en video\'s als zodanig.', ex:'Productafbeeldingen, gepersonaliseerde e-mailcopy' },
+      { tier:'minimal', name:'Revenue Management AI', sector:'Horeca', obl:'Geen verplichte vereisten. Vrijwillige goede praktijken worden aangeraden.', ex:'Dynamische prijsengines voor hotels' },
+      { tier:'minimal', name:'Spamfilter', sector:'Alle Sectoren', obl:'Geen verplichtingen. Houd basisdocumentatie bij voor intern gebruik.', ex:'E-mailfiltering, contentmoderatie' },
+      { tier:'prohibited', name:'Sociaalscoringsysteem', sector:'Alle Sectoren', obl:'Onmiddellijk verboden - moet volledig worden ontmanteld of herontworpen.', ex:'Medewerker- of burgerrangschikking op gedrag' },
+      { tier:'prohibited', name:'Realtime Biometrische Surveillance', sector:'Openbare Ruimte / Overheid', obl:'Verboden in openbare ruimten - geen uitzonderingen voor commerciële partijen.', ex:'Gezichtsherkenning in winkelcentra, stations, evenementen' }
+    ],
+    dtreeQs: [
+      { id:'q1', short:'AI-gebruik', q:'Ontwikkelt of gebruikt uw organisatie AI-systemen?', yes:{label:'Ja', next:'q2'}, no:{label:'Nee, momenteel niet', next:'r-out'} },
+      { id:'q2', short:'EU-impact', q:'Beïnvloedt uw AI mensen in de Europese Unie?', yes:{label:'Ja', next:'q3'}, no:{label:'Nee - puur buiten-EU', next:'r-minimal'} },
+      { id:'q3', short:'Beslissingen', q:'Neemt uw AI autonome beslissingen die rechten of toegang tot diensten beïnvloeden?', yes:{label:'Ja, ingrijpende beslissingen', next:'q4'}, no:{label:'Nee - adviserend of generatief', next:'q5'} },
+      { id:'q4', short:'Sector', q:'Opereert het in een gereguleerde sector (zorg, financiën, HR, onderwijs, handhaving)?', yes:{label:'Ja', next:'r-high'}, no:{label:'Nee - algemeen gebruik', next:'r-limited'} },
+      { id:'q5', short:'Interactie', q:'Communiceert het direct met gebruikers, genereert het synthetische content of gebruikt het biometrische gegevens?', yes:{label:'Ja - chatbot, deepfake, biometrie', next:'r-limited'}, no:{label:'Nee - alleen back-end', next:'r-minimal'} }
+    ],
+    dtreeResults: {
+      'r-out':{ tc:'#1a8c35', icon:'✓', ib:'rgba(52,199,89,.1)', bb:'1px solid rgba(52,199,89,.25)', title:'Buiten Reikwijdte', desc:'Uw organisatie valt momenteel buiten de directe reikwijdte. Houd ontwikkelingen bij en bouw een basis AI-inventarisatie op.', actions:['Stel een intern AI-register op','Wijs een AI-aanspreekpunt aan','Controleer AI-gebruik door leveranciers'] },
+      'r-minimal':{ tc:'#1a8c35', icon:'✓', ib:'rgba(52,199,89,.1)', bb:'1px solid rgba(52,199,89,.25)', title:'Minimaal Risico', desc:'Geen verplichte vereisten. Vrijwillige gedragscodes bouwen vertrouwen op en bereiden u voor op toekomstige regelgeving.', actions:['Documenteer uw AI-systemen intern','Volg de EU vrijwillige AI-gedragscode','Train sleutelpersoneel in verantwoorde AI'] },
+      'r-limited':{ tc:'#62cefa', icon:'◎', ib:'rgba(98,206,250,.13)', bb:'1px solid rgba(98,206,250,.45)', title:'Beperkt Risico', desc:'Transparantieverplichtingen zijn wettelijk vereist. Licht maar verplicht vanaf augustus 2026.', actions:['Voeg AI-meldingen toe aan chatbot-interfaces','Label alle AI-gegenereerde content','Werk het privacybeleid bij om AI-gebruik te vermelden'] },
+      'r-high':{ tc:'#c45000', icon:'▲', ib:'rgba(255,107,34,.1)', bb:'1px solid rgba(255,107,34,.3)', title:'Hoog Risico', desc:'Uitgebreide naleving vereist vóór inzet. Start nu met uw nalevingsprogramma - deadlines naderen.', actions:['Voer een Grondrechtimpactbeoordeling (FRIA) uit','Bouw een risicobeheerdocumentatiesysteem','Registreer in EU AI-database en stel menselijk toezicht in'] }
+    }
+  },
+  en: {
+    static: {
+      navWhat:'What It Is', navEu:'EU AI Act', navRisks:'Risk Tiers', navRoadmap:'Roadmap', navUsecases:'Use Cases',
+      navDiagBtn:'<i class="fas fa-stethoscope" style="font-size:.7rem"></i> Run Assessment',
+      heroBadge:'Regulation (EU) 2024/1689 · In force',
+      heroTitle:'AI Governance.<br/><span>Know the Rules.</span>',
+      heroSub:'Everything your organization needs to understand, implement, and demonstrate compliance with the EU AI Act - clear and practical.',
+      heroBtnPrimary:'Explore the EU AI Act <i class="fas fa-arrow-down" style="font-size:.7rem"></i>',
+      heroBtnDiag:'Run Assessment <i class="fas fa-chevron-right" style="font-size:.7rem"></i>',
+      whatEyebrow:'Foundation', whatTitle:'What is AI Governance?', whatSub:'A framework of policies, processes, and controls that helps AI systems operate safely, fairly, and within legal boundaries. Not a technical side topic, a strategic necessity.',
+      pillar1Title:'Transparency', pillar1Body:'People should know when AI influences decisions and how those decisions are made. No black boxes in high-risk contexts.',
+      pillar2Title:'Accountability', pillar2Body:'A clear chain of responsibility from model developers to users. Someone must own outcomes and risks for every AI system.',
+      pillar3Title:'Risk Management', pillar3Body:'Identify, assess, and mitigate risks before deployment. Continue monitoring as models and business context evolve.',
+      stat1:'Countries with an AI strategy or regulation (OECD, 2024) [1]', stat2:'of companies using AI have no formal governance framework [2]', stat3:'maximum fine or 7% of global turnover for the most severe infringements [3]',
+      euEyebrow:'Regulation (EU) 2024/1689', euTitle:'The EU AI Act - Key Dates', euSub:'The first comprehensive AI law in the world. It applies to any organization that develops, deploys, or uses AI affecting people in the EU [3][4].',
+      flowEyebrow:'Decision Framework', flowTitle:'Does the EU AI Act apply to you?', flowSub:'Follow the decision tree to identify your obligations. Each path leads to a specific compliance profile.',
+      riskEyebrow:'Classification Framework', riskTitle:'The Four Risk Tiers', riskSub:'Every AI system falls into one of four categories. Your obligations and sanctions scale accordingly. Click a tier to explore.',
+      gpaiTitle:'General-Purpose AI (GPAI) - A separate, horizontal category',
+      gpaiIntro:'Foundation models and large language models (LLMs) such as GPT-4, Claude, or Gemini do not fall into one of the four risk tiers. They form a separate cross-cutting category. Regardless of end use, obligations apply to the model provider itself. These apply from <strong>August 2025</strong> [3][5].',
+      gpaiCol1Label:'All GPAI providers', gpaiCol1Title:'Technical Documentation', gpaiCol1Body:'Providers must maintain technical documentation on training data, architecture, capabilities, and known limitations, available to supervisors upon request [3].',
+      gpaiCol2Label:'All GPAI providers', gpaiCol2Title:'Copyright Compliance', gpaiCol2Body:'Copyright compliance policies are mandatory. Providers must publish a summary of training data used so rights holders can raise objections [3].',
+      gpaiCol3Label:'Systemic-risk models (>10²⁵ FLOP)', gpaiCol3Title:'Systemic Risk Assessment', gpaiCol3Body:'Models trained above 10²⁵ FLOP are treated as systemic-risk models and require extra testing, incident reporting, and cybersecurity controls [3][5].',
+      gpaiDeadlineText:'In force since August 2025. Relevant providers include OpenAI, Anthropic, Google DeepMind, Mistral, Meta, and other model providers active in the EU market [3][5].',
+      roadmapEyebrow:'Implementation', roadmapTitle:'The 6-Step Compliance Plan', roadmapSub:'From zero to audit-ready, a proven approach without drowning in documentation.',
+      useEyebrow:'Practice', useTitle:'AI in Practice - Risk Classification', useSub:'The same AI capability can fall into different tiers depending on context and impact. This is how common use cases map to the law.',
+      footerLogo:'AI Governance Hub', footerTag:'Curated by CribConnects · AI Governance Experts · Amsterdam',
+      footerPrimaryBtn:'Book a Compliance Session',
+      footerDiagBtn:'<i class="fas fa-stethoscope" style="font-size:.7rem"></i> Run Assessment',
+      footerPdfBtn:'<i class="fas fa-download" style="font-size:.7rem"></i> Export PDF',
+      footerDisc:'This page is for informational purposes only and does not constitute legal advice. Organizations should consult qualified legal counsel to determine their specific obligations under Regulation (EU) 2024/1689.',
+      sourcesTitle:'Sources',
+      sourcesList:'<li>OECD AI Policy Observatory (2024) and UNESCO policy monitor for national AI strategies.</li><li>Enterprise AI governance surveys (2024) for adoption and formal governance framework coverage.</li><li>Regulation (EU) 2024/1689 (EU AI Act), including articles on prohibited practices, transparency, high-risk systems, and penalties.</li><li>European Commission implementation timeline for AI Act applicability milestones.</li><li>GPAI guidance and technical thresholds for systemic-risk models (including the 10²⁵ FLOP criterion).</li>',
+      diagTitle:'AI Risk Assessment', diagSub:'Answer the questions to determine your risk tier and immediate next steps.',
+      contactTitle:'Request a Compliance Session', contactSub:'Map your AI assets against Regulation (EU) 2024/1689 with our experts.',
+      contactSubmit:'Submit Request', contactCancel:'Cancel',
+      contactOrg:'Organization', contactEmail:'Email'
+    },
+    ui: {
+      flowRestart:'← Start over',
+      ucProhibited:'PROHIBITED', ucHigh:'HIGH', ucLimited:'LIMITED', ucMinimal:'MINIMAL', ucExample:'e.g.',
+      dtreeQuestion:'Question', dtreeOf:'of', dtreeOptA:'Option A', dtreeOptB:'Option B',
+      dtreePlan:'Book a session with CribConnects', dtreeRestart:'← Start over'
+    },
+    tlData: [
+      { date:'Aug 2024', title:'Law enters into force', body:'Regulation (EU) 2024/1689 officially enters into force. The 24-month clock starts for most obligations [3][4].', chip:'In force', cc:'#1a8c35', cb:'rgba(52,199,89,.1)' },
+      { date:'Feb 2025', title:'Prohibited practices', body:'AI systems involving subliminal manipulation, social scoring, and real-time biometric surveillance in public spaces must stop [3][4].', chip:'Expired', cc:'#cc2200', cb:'rgba(255,59,48,.1)' },
+      { date:'Aug 2025', title:'GPAI & Governance', body:'Obligations for general-purpose AI models take effect. Organizations must establish AI governance frameworks [3][5].', chip:'Now active', cc:'#c45000', cb:'rgba(255,107,34,.1)' },
+      { date:'Aug 2026', title:'High-risk (Annex I)', body:'High-risk AI in critical infrastructure must be registered in the EU database and pass conformity assessments [3][4].', chip:'12 months', cc:'var(--blue)', cb:'rgba(98,206,250,.12)' },
+      { date:'Aug 2027', title:'Full enforcement', body:'All Annex III high-risk systems must be compliant. National supervisors begin full market enforcement [3][4].', chip:'24 months', cc:'#6e3fc7', cb:'rgba(110,63,199,.1)' }
+    ],
+    flowNodes: {
+      q1:{ type:'decision', q:'Does your organization develop or use AI systems?', opts:[{l:'Yes - we build or use AI',c:'',n:'q2'},{l:'No, not currently',c:'no',n:'r-out'}] },
+      q2:{ type:'decision', q:'Does your AI target people in the European Union or affect them?', opts:[{l:'Yes',c:'',n:'q3'},{l:'No - purely outside the EU',c:'no',n:'r-limited'}] },
+      q3:{ type:'decision', q:'Does your AI make autonomous decisions affecting rights, access to services, or working conditions?', opts:[{l:'Yes, impactful decisions',c:'yes',n:'q4'},{l:'No - advisory or generative',c:'no',n:'q5'}] },
+      q4:{ type:'decision', q:'Is it used in a regulated sector - healthcare, finance, HR, education, or law enforcement?', opts:[{l:'Yes',c:'yes',n:'r-high'},{l:'No - general use',c:'no',n:'r-limited'}] },
+      q5:{ type:'decision', q:'Does it interact directly with users, generate synthetic content, or use biometric data?', opts:[{l:'Yes - chatbot, deepfake, or biometrics',c:'yes',n:'r-limited'},{l:'No - back-end analytics only',c:'no',n:'r-minimal'}] },
+      'r-out':{ type:'t-safe', title:'Out of Scope', desc:'Your organization is currently outside the direct scope of the law. Monitor developments and set up a basic AI inventory.', actions:['Create an internal AI asset register','Assign an AI point of contact','Review AI usage by external vendors'] },
+      'r-minimal':{ type:'t-safe', title:'Minimal Risk', desc:'No mandatory requirements under the EU AI Act. Voluntary codes help build trust and prepare for future regulation.', actions:['Document your AI systems internally','Follow the EU voluntary AI code of conduct','Train key staff in responsible AI'] },
+      'r-limited':{ type:'t-limited', title:'Limited Risk - Transparency Required', desc:'You must inform users when they interact with AI and label AI-generated content. Required from August 2026.', actions:['Add AI notices to chatbot interfaces','Label all AI-generated text, images, and audio','Update privacy policy to mention AI usage'] },
+      'r-high':{ type:'t-warn', title:'High Risk - Full Compliance Required', desc:'Significant obligations apply before deployment. Start your compliance program now - deadlines are approaching.', actions:['Run a Fundamental Rights Impact Assessment (FRIA)','Build a risk-management documentation system','Register the system in the EU AI database and set up human oversight'] }
+    },
+    tiers: [
+      { id:'prohibited', accent:'#ff3b30', label:'Unacceptable Risk', name:'Prohibited Systems', short:'Prohibited AI that poses a clear threat to fundamental rights.', desc:'AI applications that pose an unacceptable risk to fundamental rights are fully prohibited. These systems must be stopped or fundamentally redesigned.', items:['Subliminal or manipulative techniques','Social scoring by public authorities','Real-time biometric identification in public spaces','Emotion recognition in workplaces and education','Predictive policing based on profiling'], deadline:'⛔ Prohibited since 2 February 2025' },
+      { id:'high', accent:'#ff6b22', label:'High Risk', name:'High-Risk AI Systems', short:'Used in sectors where decisions have major consequences for people.', desc:'Used in sectors where decisions significantly affect health, livelihood, or safety. Full compliance is required before deployment [3].', items:['Lifecycle risk-management documentation','High-quality training data with bias testing','Automated event logging and audit trails','Human oversight mechanism, no fully autonomous decisions','Conformity assessment + EU database registration','Post-market monitoring and incident reporting'], deadline:'📋 Annex I: Aug 2026 · Annex III: Aug 2027 [3][4]' },
+      { id:'limited', accent:'#62cefa', label:'Limited Risk', name:'Limited-Risk AI', short:'Systems that interact with people or generate synthetic content.', desc:'Systems that interact with people or generate synthetic content must be transparent about their AI nature [3].', items:['Chatbots must inform users they are interacting with AI','Deepfakes must be labeled as AI-generated','Emotion recognition: individual notice required','AI-generated content requires machine-readable labels'], deadline:'📢 Transparency obligations: August 2026 [3][4]' },
+      { id:'minimal', accent:'#34c759', label:'Minimal Risk', name:'Minimal-Risk AI', short:'The vast majority of AI systems - no mandatory rules.', desc:'The vast majority of AI systems - spam filters, recommendation systems, productivity tools. No mandatory requirements, but good practices build trust.', items:['No legal obligations - voluntary codes are encouraged','Follow the EU AI Alliance voluntary pledge','Document basic information on system purpose and data','Apply ethical AI principles for long-term trust'], deadline:'✅ Voluntary codes - no mandatory deadline' }
+    ],
+    steps: [
+      { n:'01', c:'#62cefa', bg:'rgba(98,206,250,.14)', title:'AI Inventory', desc:'Map every AI system, including shadow IT, vendor tools, and embedded models. You cannot govern what you do not know.', meta:'1–2 weeks · All teams' },
+      { n:'02', c:'#34c759', bg:'rgba(52,199,89,.1)', title:'Risk Triage', desc:'Classify each system against the law’s criteria. Identify which ones fall in high-risk annex categories and which are GPAI.', meta:'1 week · Legal + IT' },
+      { n:'03', c:'#ff6b22', bg:'rgba(255,107,34,.1)', title:'Impact Assessment', desc:'Perform Fundamental Rights Impact Assessments (FRIAs) for high-risk systems before deployment or continued use.', meta:'2–4 weeks · Multidisciplinary' },
+      { n:'04', c:'#8e44ad', bg:'rgba(142,68,173,.1)', title:'Technical Controls', desc:'Implement logging, bias testing, data-quality controls, and fairness metrics. Document everything for audit readiness.', meta:'Ongoing · Engineering' },
+      { n:'05', c:'#ff3b30', bg:'rgba(255,59,48,.08)', title:'Human Oversight', desc:'Define who reviews AI decisions, when human intervention is required, and how overrides are logged. No fully autonomous high-risk decisions.', meta:'2 weeks · Operations' },
+      { n:'06', c:'#00b4d8', bg:'rgba(0,180,216,.1)', title:'Post-Market Monitoring', desc:'Monitor model drift, collect incident reports, and keep documentation current. Compliance is a program, not a project.', meta:'Continuous · All teams' }
+    ],
+    usecases: [
+      { tier:'high', name:'CV Screening System', sector:'HR / Recruitment', obl:'Conformity assessment + human review of each rejection is required.', ex:'ATS scoring, automated candidate ranking' },
+      { tier:'high', name:'Credit Scoring Model', sector:'Financial Services', obl:'Explainability, bias audits, and EU database registration are required.', ex:'Automated loan approval, insurance pricing' },
+      { tier:'limited', name:'Customer Service Chatbot', sector:'Hospitality / Retail', obl:'Must inform users they are speaking with AI at session start.', ex:'Hotel booking bots, airline support' },
+      { tier:'limited', name:'AI-Generated Marketing', sector:'Marketing / Media', obl:'Label all AI-generated images, text, and videos as such.', ex:'Product imagery, personalized email copy' },
+      { tier:'minimal', name:'Revenue Management AI', sector:'Hospitality', obl:'No mandatory requirements. Voluntary good practices are recommended.', ex:'Dynamic pricing engines for hotels' },
+      { tier:'minimal', name:'Spam Filter', sector:'All Sectors', obl:'No obligations. Keep basic documentation for internal use.', ex:'Email filtering, content moderation' },
+      { tier:'prohibited', name:'Social Scoring System', sector:'All Sectors', obl:'Immediately prohibited - must be fully dismantled or redesigned.', ex:'Employee or citizen behavior ranking' },
+      { tier:'prohibited', name:'Real-Time Biometric Surveillance', sector:'Public Space / Government', obl:'Prohibited in public spaces - no exceptions for commercial parties.', ex:'Facial recognition in malls, stations, events' }
+    ],
+    dtreeQs: [
+      { id:'q1', short:'AI usage', q:'Does your organization develop or use AI systems?', yes:{label:'Yes', next:'q2'}, no:{label:'No, not currently', next:'r-out'} },
+      { id:'q2', short:'EU impact', q:'Does your AI affect people in the European Union?', yes:{label:'Yes', next:'q3'}, no:{label:'No - outside the EU only', next:'r-minimal'} },
+      { id:'q3', short:'Decisions', q:'Does your AI make autonomous decisions affecting rights or access to services?', yes:{label:'Yes, impactful decisions', next:'q4'}, no:{label:'No - advisory or generative', next:'q5'} },
+      { id:'q4', short:'Sector', q:'Does it operate in a regulated sector (healthcare, finance, HR, education, enforcement)?', yes:{label:'Yes', next:'r-high'}, no:{label:'No - general use', next:'r-limited'} },
+      { id:'q5', short:'Interaction', q:'Does it directly interact with users, generate synthetic content, or use biometrics?', yes:{label:'Yes - chatbot, deepfake, biometrics', next:'r-limited'}, no:{label:'No - back-end only', next:'r-minimal'} }
+    ],
+    dtreeResults: {
+      'r-out':{ tc:'#1a8c35', icon:'✓', ib:'rgba(52,199,89,.1)', bb:'1px solid rgba(52,199,89,.25)', title:'Out of Scope', desc:'Your organization is currently outside the direct scope. Track developments and build a basic AI inventory.', actions:['Create an internal AI register','Assign an AI point of contact','Review supplier AI usage'] },
+      'r-minimal':{ tc:'#1a8c35', icon:'✓', ib:'rgba(52,199,89,.1)', bb:'1px solid rgba(52,199,89,.25)', title:'Minimal Risk', desc:'No mandatory requirements. Voluntary codes build trust and prepare you for future regulation.', actions:['Document your AI systems internally','Follow the EU voluntary AI code of conduct','Train key staff in responsible AI'] },
+      'r-limited':{ tc:'#62cefa', icon:'◎', ib:'rgba(98,206,250,.13)', bb:'1px solid rgba(98,206,250,.45)', title:'Limited Risk', desc:'Transparency obligations are legally required. Lightweight, but mandatory from August 2026.', actions:['Add AI notices to chatbot interfaces','Label all AI-generated content','Update privacy policy to mention AI usage'] },
+      'r-high':{ tc:'#c45000', icon:'▲', ib:'rgba(255,107,34,.1)', bb:'1px solid rgba(255,107,34,.3)', title:'High Risk', desc:'Extensive compliance is required before deployment. Start your compliance program now - deadlines are approaching.', actions:['Run a Fundamental Rights Impact Assessment (FRIA)','Build a risk-management documentation system','Register in the EU AI database and set up human oversight'] }
+    }
+  }
+};
+
+function setText(id, value, html = false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (html) el.innerHTML = value; else el.textContent = value;
+}
+function rebuildQMap() {
+  qMap = {};
+  dtreeQs.forEach(q => { qMap[q.id] = q; });
+}
+function renderTimeline() {
+  const tlTrack = document.getElementById('tlTrack');
+  tlTrack.innerHTML = '';
+  tlData.forEach((d, i) => {
+    const el = document.createElement('div');
+    el.className = 'tl-item' + (i === 2 ? ' active' : '');
+    el.innerHTML = `<div class="tl-dot"></div><div class="tl-date">${d.date}</div><div class="tl-title">${d.title}</div><div class="tl-body">${d.body}</div><div style="text-align:center"><span class="tl-chip" style="color:${d.cc};background:${d.cb};border:1px solid ${d.cc}30">${d.chip}</span></div>`;
+    el.addEventListener('click', () => { document.querySelectorAll('.tl-item').forEach(x => x.classList.remove('active')); el.classList.add('active'); });
+    tlTrack.appendChild(el);
+  });
+}
+function renderFlow(id) {
+  const area = document.getElementById('flowArea');
+  const n = flowNodes[id];
+  area.innerHTML = '';
+  if (n.type === 'decision') {
+    const el = document.createElement('div');
+    el.className = 'flow-node decision';
+    el.innerHTML = `<div class="flow-q">${n.q}</div><div class="flow-opts">${n.opts.map(o => `<button class="flow-opt ${o.c}" onclick="renderFlow('${o.n}')">${o.l}</button>`).join('')}</div>`;
+    area.appendChild(el);
+  } else {
+    const c = flowColorMap[n.type] || 'var(--gray-6)';
+    const ui = i18n[currentLang].ui;
+    const el = document.createElement('div');
+    el.className = `flow-node ${n.type}`;
+    el.innerHTML = `<div class="flow-result-title" style="color:${c}">${n.title}</div><div class="flow-result-desc">${n.desc}</div><div class="flow-actions-list">${n.actions.map(a => `<div class="flow-act">${a}</div>`).join('')}</div><button class="flow-restart" onclick="renderFlow('q1')">${ui.flowRestart}</button>`;
+    area.appendChild(el);
+  }
+}
+const tierList = document.getElementById('tierList');
+const tierPanel = document.getElementById('tierPanel');
+function renderTierPanel(t) {
+  tierPanel.innerHTML = `<div class="tp-label" style="color:${t.accent}">${t.label}</div><div class="tp-title">${t.name}</div><div class="tp-desc">${t.desc}</div><ul class="tp-list">${t.items.map(i => `<li>${i}</li>`).join('')}</ul><div class="tp-deadline">${t.deadline}</div>`;
+}
+function renderTiers() {
+  tierList.innerHTML = '';
+  tiers.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'tier-item' + (i === 0 ? ' active' : '');
+    row.innerHTML = `<div class="tier-accent" style="background:${t.accent}"></div><div><div class="tier-label" style="color:${t.accent}">${t.label}</div><div class="tier-name">${t.name}</div><div class="tier-short">${t.short}</div></div><div class="tier-chevron"><i class="fas fa-chevron-right"></i></div>`;
+    row.addEventListener('click', () => { document.querySelectorAll('.tier-item').forEach(x => x.classList.remove('active')); row.classList.add('active'); renderTierPanel(t); });
+    tierList.appendChild(row);
+    if (i === 0) renderTierPanel(t);
+  });
+}
+const roadmapGrid = document.getElementById('roadmapGrid');
+function renderRoadmap() {
+  roadmapGrid.innerHTML = '';
+  steps.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'card step reveal visible';
+    el.innerHTML = `<div class="step-n" style="background:${s.bg};color:${s.c}">${s.n}</div><h4>${s.title}</h4><p>${s.desc}</p><div class="step-meta">${s.meta}</div>`;
+    roadmapGrid.appendChild(el);
+  });
+}
+const ucGrid = document.getElementById('ucGrid');
+function renderUsecases() {
+  const ui = i18n[currentLang].ui;
+  ucGrid.innerHTML = '';
+  const tierLabels = { prohibited:ui.ucProhibited, high:ui.ucHigh, limited:ui.ucLimited, minimal:ui.ucMinimal };
+  usecases.forEach(u => {
+    const el = document.createElement('div');
+    el.className = 'card uc reveal visible';
+    el.innerHTML = `<span class="uc-tier ${u.tier}">${tierLabels[u.tier]}</span><h4>${u.name}</h4><div class="uc-sector">${u.sector}</div><p>${u.obl}</p><div class="uc-note">${ui.ucExample} ${u.ex}</div>`;
+    ucGrid.appendChild(el);
+  });
+}
+function resetDtree() { dtreeHistory = []; dtreeCurrent = 'q1'; renderDtree(); }
+function dtreeAnswer(qId, answer, nextId) { const q = qMap[qId]; dtreeHistory.push({ qId, q: q.q, short: q.short, answer }); dtreeCurrent = nextId; renderDtree(); }
+function renderDtree() {
+  const ui = i18n[currentLang].ui;
+  const container = document.getElementById('dtreeContainer');
+  container.innerHTML = '';
+  if (dtreeHistory.length > 0) {
+    const crumb = document.createElement('div');
+    crumb.className = 'diag-crumb';
+    dtreeHistory.forEach((h, i) => {
+      const span = document.createElement('span'); span.className = 'crumb-step'; span.textContent = h.short; crumb.appendChild(span);
+      if (i < dtreeHistory.length - 1) { const sep = document.createElement('span'); sep.className = 'crumb-sep'; sep.innerHTML = '<i class="fas fa-chevron-right" style="font-size:.55rem"></i>'; crumb.appendChild(sep); }
+    });
+    container.appendChild(crumb);
+  }
+  if (dtreeHistory.length > 0) {
+    const hist = document.createElement('div');
+    hist.className = 'dtree-history';
+    dtreeHistory.forEach(h => { const item = document.createElement('div'); item.className = 'dtree-hist-item'; item.innerHTML = `<div class="dhi-dot"></div><div class="dhi-q">${h.q}</div><i class="fas fa-chevron-right dhi-arrow"></i><div class="dhi-a">${h.answer}</div>`; hist.appendChild(item); });
+    container.appendChild(hist);
+  }
+  if (dtreeResults[dtreeCurrent]) {
+    const r = dtreeResults[dtreeCurrent];
+    const res = document.createElement('div');
+    res.className = 'dtree-node';
+    res.innerHTML = `<div class="dtree-result"><div class="dr-icon" style="background:${r.ib};border:${r.bb};color:${r.tc}">${r.icon}</div><h3 style="color:${r.tc}">${r.title}</h3><div class="dr-desc">${r.desc}</div><div class="dr-actions">${r.actions.map(a => `<div class="dr-act">${a}</div>`).join('')}</div><div class="dr-btns"><a href="https://www.cribconnects.com" target="_blank" rel="noopener" class="btn-primary" style="justify-content:center;width:100%">${ui.dtreePlan}</a><button class="dr-restart" onclick="resetDtree()">${ui.dtreeRestart}</button></div></div>`;
+    container.appendChild(res);
+  } else {
+    const q = qMap[dtreeCurrent];
+    const node = document.createElement('div');
+    node.className = 'dtree-node';
+    node.innerHTML = `<div class="dtree-node-label">${ui.dtreeQuestion} ${dtreeHistory.length + 1} ${ui.dtreeOf} ${dtreeQs.length}</div><div class="dtree-q">${q.q}</div><div class="dtree-opts"><button class="dtree-opt" onclick="dtreeAnswer('${q.id}','${q.yes.label}','${q.yes.next}')"><div class="dtree-opt-label">${ui.dtreeOptA}</div><div class="dtree-opt-text">${q.yes.label}</div></button><button class="dtree-opt" onclick="dtreeAnswer('${q.id}','${q.no.label}','${q.no.next}')"><div class="dtree-opt-label">${ui.dtreeOptB}</div><div class="dtree-opt-text">${q.no.label}</div></button></div>`;
+    container.appendChild(node);
+  }
+  const modal = document.getElementById('diagModal');
+  setTimeout(() => { modal.scrollTop = modal.scrollHeight; }, 50);
+}
+function applyLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.getElementById('langNl').classList.toggle('active', lang === 'nl');
+  document.getElementById('langEn').classList.toggle('active', lang === 'en');
+  const pack = i18n[lang];
+  const htmlIds = new Set(['navDiagBtn','heroTitle','heroBtnPrimary','heroBtnDiag','footerDiagBtn','footerPdfBtn','gpaiIntro','sourcesList']);
+  Object.entries(pack.static).forEach(([id, value]) => {
+    if (id === 'contactOrg') {
+      const el = document.getElementById('contactOrg');
+      if (el) el.placeholder = value;
+      return;
+    }
+    if (id === 'contactEmail') {
+      const el = document.getElementById('contactEmail');
+      if (el) el.placeholder = value;
+      return;
+    }
+    setText(id, value, htmlIds.has(id));
+  });
+  tlData = deepClone(pack.tlData);
+  flowNodes = deepClone(pack.flowNodes);
+  tiers = deepClone(pack.tiers);
+  steps = deepClone(pack.steps);
+  usecases = deepClone(pack.usecases);
+  dtreeQs = deepClone(pack.dtreeQs);
+  dtreeResults = deepClone(pack.dtreeResults);
+  rebuildQMap();
+  renderTimeline();
+  renderFlow('q1');
+  renderTiers();
+  renderRoadmap();
+  renderUsecases();
+  resetDtree();
+}
+document.getElementById('langNl').addEventListener('click', () => applyLanguage('nl'));
+document.getElementById('langEn').addEventListener('click', () => applyLanguage('en'));
+applyLanguage('nl');
+</script>
+</body>
+</html>
